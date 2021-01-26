@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        
+        <script src="" async defer></script>
+    </body>
+
+    <script>
+        fetch("https://api.nasa.gov/planetary/apod?api_key=UHnT1dAruvkXecGhFd4rlUDuwnSwH6Fg4Grdgycy")
+        .then(response => response.json())
+        .then(json => {
+            let [title, hdurl, explanation] = [json.title, json.hdurl, json.explanation]
+            let h1 = document.createElement('h1');
+            h1.innerText = title;
+            let img = document.createElement('img');
+            img.src = hdurl;
+            let p = document.createElement('p');
+            p.innerText = explanation;
+            document.body.appendChild(h1);
+            document.body.appendChild(img);
+            document.body.appendChild(p);
+        });
+             
+    </script>
+</html>
+
