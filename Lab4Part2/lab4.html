@@ -34,7 +34,7 @@
                 for(let library of data) {
                     //Clone the template card
                     let card = templateCard.cloneNode(true);
-                    card.style.visibility = "visible";
+                    
                     //Put the fields from the library object into the card
                     card.querySelector(".card-title").innerText = library["name_"];
                     
