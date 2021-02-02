@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>repl.it</title>
+  </head>
+  <body>
+    <h1>Form Basics</h1>
+
+
+
+
+    <p id="uptonSinclairQuote">
+It is difficult to get a man to understand something, when his salary depends upon his not understanding it! -- Upton Sinclair
+    </p>
+
+    <form action="" name="form1" id="form1">
+        <label for="text1"> <strong> Name:</strong></label><br>
+        <input type="text" name="text1" id="text1"><br>
+        <label for="radio1"> <strong> Colors: </strong> </label><br>
+        <label for="red">Red</label>
+        <input type="radio" name="radio1" id="red"><br>
+        <label for="green">Green</label>
+        <input type="radio" name="radio1" id="green"><br>
+        <label for="blue">Blue</label>
+        <input type="radio" name="radio1" id="blue"><br>
+        <label for="select1"> <strong> Day: </strong> </label> <br>
+        <select name="select1" id="select1">
+            <option value="nothing"></option>
+            <option value="mon">Monday</option>
+            <option value="wed">Wednesday</option>
+            <option value="fri">Friday</option>
+        </select> <br>
+        <label for="textarea1" > <strong>Feedback: </strong> </label><br>
+        <textarea name="textarea1" id="textarea1" placeholder="Please provide any additional feedback" cols="30" rows="10"></textarea>
+
+    </form>
+
+    <script>
+        //1
+        document.querySelector("#text1").value = "Sergiu Buruiana";
+
+        //2
+        document.querySelector('input[id="green"]').checked = true;
+
+        //3
+        document.querySelector("#textarea1").value = document.querySelector("#uptonSinclairQuote").textContent;
+
+        //4
+        document.querySelector("#select1").addEventListener("change", (event) => {
+            console.log(event.target.value);
+        });
+
+    </script>
+  
+</body>
+</html>
