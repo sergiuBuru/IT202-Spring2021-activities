@@ -77,13 +77,14 @@
                 //sort by date
                 d.sort(comparator)
 
-                var d2 = prepend( ["Doses", "Date"], d );
+                var d2 = prepend( ["Doses", "Doses"], d );
                 var doses = google.visualization.arrayToDataTable(d2);
                 var options = {
                     title: 'Vaccine Progression',
                     curveType: 'function',
-                    legend: { position: 'bottom' },
-                    vAxis: {viewWindow: {min: 0}}
+                    //legend: { position: 'bottom' },
+                    vAxis: {viewWindow: {min: 0},title:"Doses"},
+                    hAxis: {title: "Date"}
                 };
 
                 var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
