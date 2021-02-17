@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id="displayDiv">
+        <h3 id="one"></h3>
+        <h3 id="two"></h3>
+        <h3>List of schools with a student attendance year 1 greater than or equal to 98.0%<h3>
+        <ul id="three"></ul>
+        <h3>list all school names that start with the letter K</h3>
+        <ul id="four"></ul>
+        <h3 id="five"></h3>
+    </div>
+
+
+
+    <script>
+        //Define the database
+        var db = new Dexie("school_database");
+        // db.delete().then(() => {
+        //     console.log("Database successfully deleted");
+        // }).catch((err) => {
+        //     console.error("Could not delete database");
+        // }).finally(() => {
+        //     // Do what should be done next...
+        // });
+
+        db.version(1).stores({
+            schools: 'name, address, type, website, attainment_rating, attendance_year_one'
+        }); 
+
+        fetch("https://data.cityofchicago.org/resource/dw27-rash.json")
+            .then( repsonse => repsonse.json())
+            .then( data => {
+                //Insert the data for each school
+                //console.log(data)
+                data.forEach(school => {
+                    db.schools.put({
+                        name: school["long_name"],
+                        address: school["address"],
+                        type: school["school_type"],
+                        website: school["website"],
+                        attainment_rating: school["student_attainment_rating"],
+                        attendance_year_one: school["student_attendance_year_1"]
+                    });
+                });
+
+            });
+        let displayDiv = document.querySelector("#displayDiv");
+        let h3one = document.querySelector("#one");
+        let h3two = document.querySelector("#two");
+        let ul1 = document.querySelector("#three");
+        let ul2 = document.querySelector("#four");
+        let h3five = document.querySelector("#five");
+
+        //Count all the schools in the database
+        db.schools.count( count => {
+            h3one.innerHTML = `${'Count of schools in the database: '} ${count}`;
+        });
+
+        //Count all schools with student attainment rating of average
+        db.schools.where("attainment_rating").equals("AVERAGE").count( count => {
+           h3two.innerHTML = `${'Count of schools with average attainment rating: '} ${count}`;
+        });
+
+        //List all school names with a student attendance year 1 hreater than or equal to 98%
+        db.schools.each( school => {
+            if( parseInt(school["attendance_year_one"]) >= 98) {
+                var item = document.createElement("li");
+                item.innerHTML = school["name"];
+                ul1.appendChild(item);
+            }
+        })
+
+        //list all school names that start with the letter K 
+        db.schools.each( school => {
+            if( school["name"][0] == "K") {
+                var item = document.createElement("li");
+                item.innerHTML = school["name"];
+                ul2.appendChild(item);
+            }
+        })
+
+        //remove all schools with a school type of Charter and get the count of the remaining schools
+        db.schools.where("type").equals("Charter").delete();
+        db.schools.count( count => {
+            h3five.innerHTML = `${'Count of schools in the database excluding Charter schools: '} ${count}`;
+        });
+
+    </script>
+</body>
+</html>
