@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -46,10 +45,10 @@
               },
               {
                 "file": "lab9Images/batmanmask.png",
-                "type": "earwear",
-                "eye_distance": 300,
-                "offset_horizontal": 150,
-                "offset_vertical": 100
+                "type": "mask",
+                "eye_distance": 95,
+                "offset_horizontal": 200,
+                "offset_vertical": 350
               }              
           ];
 
@@ -157,7 +156,9 @@
                       nose and glasses lens centers are about 300px apart,
                       so we'll have to scale to paste on face.
                   */
-                  
+                  console.log(activeImage);
+                    console.log(data.responses[0].faceAnnotations[0].landmarks)
+
                   let left_eye = data.responses[0].faceAnnotations[0].landmarks.filter((el) => {return el.type == "LEFT_EYE"})[0];
 
                   // let right_eye = response.responses[0].faceAnnotations[0].landmarks.filter(function(el) {return el.type == "RIGHT_EYE_PUPIL"})[0];
@@ -183,9 +184,7 @@
                   /*  after getting that part working, I needed to offset
                       the destination x,y due to drawImage dest x,y as the 
                       top left corner of the image we're drawing;
-
                       I had to look at the nose/glasses image;  I found the center of the right-eye lens is 150 x and 100 y from the top left of the image
-
                   */
 
                   let destOffsetX = -1*activeImage["offset_horizontal"];
