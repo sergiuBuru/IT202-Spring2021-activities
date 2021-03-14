@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <style type="text/css">
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      .update {
+        margin: 1% 1% 1% 1%;
+      }
+      
+      #updates {
+          width: 100%;
+          height: 20%;
+          overflow: scroll;
+      }
+      
+      #map {
+        height: 100%;
+      }
+
+      /* Optional: Makes the sample page fill the window. */
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <script>
+        let map;
+        let lat;
+        let lng;
+        let oldLat;
+        let oldLng; 
+
+        function initMap() {
+            let updates = document.getElementById("updates")
+
+            //get the initial location of the user to set up the map location accurately
+            navigator.geolocation.getCurrentPosition((position) => {
+                lat = position.coords.latitude;
+                lng = position.coords.longitude;
+                oldLat = lat;
+                oldLng = lng;
+                map = new google.maps.Map(document.getElementById("map"), {
+                    center: { lat: lat, lng: lng },
+                    zoom: 17,
+                });
+
+                let update = document.createElement("p");
+                update.classList.add("update")
+                update.innerText = lat + " " + lng + " " + new Date();
+                updates.prepend(update)
+
+                console.log(Date.now())
+            });
+
+            const watchID = navigator.geolocation.watchPosition((position) => {
+                lat = position.coords.latitude;
+                lng = position.coords.longitude;
+                console.log("new lat is: " + lat + " new lng is: " + lng);
+
+                if(oldLat != lat && oldLng != lng) {
+                    const circle = new google.maps.Circle({
+                    strokeColor: "#FF0000",
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    fillColor: "#FF0000",
+                    fillOpacity: 0.35,
+                    map,
+                    center: {lat: lat, lng: lng},
+                    radius: 8
+                });
+
+                let update = document.createElement("p");
+                update.classList.add("update")
+                update.innerText = lat + " " + lng + " " + new Date();
+                updates.prepend(update)
+                }
+            });
+        }
+
+
+    </script>
+  </head>
+  <body>
+    <div id="updates"></div>
+
+    <div id="map"></div>
+
+    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC0cy9QJ-JUEyB5lERlfQpEcpbJmbByoJM&callback=initMap&libraries=&v=weekly"
+      async
+    ></script>
+
+
+  </body>
+</html>
