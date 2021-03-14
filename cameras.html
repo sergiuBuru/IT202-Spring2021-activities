@@ -57,6 +57,11 @@
 		footer a {
 			color: #fff;
 		}
+
+        .bttn {
+            width: 120px;
+            height: 30px;
+        }
 	</style>
 
 </head>
@@ -70,6 +75,9 @@
 	<main>
 		<div class="controls">
 			<button id="button">Get camera</button>
+        </div>
+        <div id="bdiv">
+
         </div>
 
         <video id="video" autoplay playsinline></video>
@@ -85,8 +93,9 @@
 
     const video = document.querySelector("#video");
     const button = document.querySelector("#button");
+    const buttonsDiv = document.querySelector("#bdiv");
+    //store a reference to a camera button and its id
     const buttons = [];
-    const buttonsID = [];
     let currentStream;
 
     function stopMediaTracks(stream) {
@@ -96,18 +105,35 @@
     }
 
     button.addEventListener("click", event => {
-        const constraints = {
-            video: true,
-            audio: false
-        };
-        navigator.mediaDevices
-            .getUserMedia(constraints)
-            .then(stream => {
-                video.srcObject = stream;
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        //Display the camera buttons
+        buttons.forEach( bttn => {
+            buttonsDiv.appendChild(bttn);
+            bttn.addEventListener("click", event => {
+                if(typeof currentStream !== 'undefined') {
+                    stopMediaTracks(currentStream);
+                }
+                const videoConstraints = {};
+                if(event.target.value === '') {
+                    videoConstraints.facingMode = 'environment'
+                } else {
+                    videoConstraints.deviceId = {exact: event.target.value};
+                }
+                const constraints = {
+                    video: videoConstraints,
+                    audio: false
+                };
+                navigator.mediaDevices
+                    .getUserMedia(constraints)
+                    .then(stream => {
+                        currentStream = stream;
+                        video.srcObject = stream;
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+                    })
+        });
+
     })
 
     function gotDevices(mediaDevices) {
@@ -116,13 +142,13 @@
             if(device.kind === 'videoinput') {
                 //create a button for it
                 const b = document.createElement("button");
-                b.value = device.label || `Camera ${count++}`;
+                b.innerText = device.label || `Camera ${count++}`;
+                b.classList.add("bttn");
+                b.value = device.deviceId;
                 buttons.push(b);
-                buttonsID.push(device.deviceId);
             }
         })
     }
-
 
     navigator.mediaDevices.enumerateDevices().then(gotDevices);
   </script>
