@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        div {
+            margin: 5%;
+        }
+
+    </style>
+</head>
+<body>
+    <div>
+        <textarea name="" id="text" cols="30" rows="2"></textarea>
+        <select name="" id="select">
+            <option value=""></option>
+        </select>
+        <button id="bttn" disabled>Text to speech</button>
+    </div>
+
+    <script>
+        let text;
+        let button = document.querySelector("#bttn");
+        let select = document.querySelector("#select");
+        let voices = speechSynthesis.getVoices();
+
+
+        setTimeout(() => {
+            voices = speechSynthesis.getVoices();
+            voices.forEach( voice => {
+                let option = document.createElement("option");
+                option.textContent = voice.lang;
+                select.appendChild(option)
+                
+            })
+        }, 1000);
+        
+        button.addEventListener("click", (event) => {
+            text = document.querySelector("#text").value; 
+            const  language = select.value;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = language;
+            speechSynthesis.speak(utterance);
+            button.disabled = true;
+        })
+
+        select.addEventListener("change", event => {
+            button.disabled = false;
+        })
+
+    </script>
+</body>
+</html>
