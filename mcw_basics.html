@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+        <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    </head>
+<body>
+    
+</body>
+
+<label class="mdc-text-field mdc-text-field--filled">
+    <span class="mdc-text-field__ripple"></span>
+    <span class="mdc-floating-label" id="my-label-id">Write something here</span>
+    <input class="mdc-text-field__input" type="text" aria-labelledby="my-label-id">
+    <span class="mdc-line-ripple"></span>
+  </label>
+
+    <button class="mdc-button foo-button">
+        <div class="mdc-button__ripple"></div>
+        <span class="mdc-button__label">Button</span>
+      </button>
+
+      <div class="mdc-snackbar">
+        <div class="mdc-snackbar__surface" role="status" aria-relevant="additions">
+          <div class="mdc-snackbar__label" aria-atomic="false">
+            You entered: 
+          </div>
+          <!-- <div class="mdc-snackbar__actions" aria-atomic="true">
+            <button type="button" class="mdc-button mdc-snackbar__action">
+              <div class="mdc-button__ripple"></div>
+              <span class="mdc-button__label">Retry</span>
+            </button> -->
+          </div>
+        </div>
+      </div>
+
+
+    <script>
+        const button = document.querySelector('.foo-button');
+        const text = document.querySelector('.mdc-text-field');
+        const sb = document.querySelector('.mdc-snackbar');
+        const MDCTextField = mdc.textField.MDCTextField;
+        const MDCSnackBar = mdc.snackbar.MDCSnackbar;
+        mdc.ripple.MDCRipple.attachTo(button);
+        const textfield = new MDCTextField(text);
+        const snackbar = new MDCSnackBar(sb);
+        button.addEventListener("click", (event) => {
+            const input = textfield.value;
+            snackbar.labelText += input;
+            snackbar.open();
+        })
+    </script>
+</html>
